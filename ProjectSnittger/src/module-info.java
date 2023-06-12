@@ -1,9 +1,0 @@
-/**
- * 
- */
-/**
- * @author KlugeDr
- *
- */
-module ProjectSnittger {
-}
