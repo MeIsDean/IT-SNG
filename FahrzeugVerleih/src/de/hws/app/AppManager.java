@@ -1,10 +1,17 @@
 package de.hws.app;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 import de.hws.data.*;
+
+import view.ViewManager;
 
 public class AppManager {
 
@@ -37,11 +44,25 @@ public class AppManager {
 	}
 	
 	private void writeCarsToFile(String filepath, List<Motocar> cars) {
-		
+		try {
+			FileOutputStream fos = new FileOutputStream(filepath);
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			oos.writeObject(allCars);
+			oos.close();
+			} catch (IOException e) {
+			ViewManager.getInstance().showMessage(ex.getLocalizedMessage());
+			}
 	}
 	
 	private List<Motocar> readCarsFromFile(String filepath){
-		return null;
+		try {
+			FileInputStream fis = new FileInputStream(filepath);
+			ObjectInputStream ois = new ObjectInputStream(fis);
+			allCars = (ArrayList<Motocar>) ois.readObject();
+			} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+			}
+		return allCars;
 	}
 	
 	private void writeCustomersToFile(String filepath, List<Customer> customer) {
@@ -106,5 +127,15 @@ public class AppManager {
 		return null;
 	}
 	
+	public void addBike(BikeData bike) {
+		bikeData.add(bike);
+		writeDataToFile();
+		}
+
+	private void writeDataToFile() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 }

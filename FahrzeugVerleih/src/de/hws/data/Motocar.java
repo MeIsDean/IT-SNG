@@ -1,9 +1,12 @@
 package de.hws.data;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 import view.FileOutputStream;
@@ -100,18 +103,4 @@ public class Motocar implements Serializable {
 		return null;
 	}
 	
-	private void writeCarsToFile(String filePath) {
-		try {
-		FileOutputStream fos = new FileOutputStream(filepath);
-		ObjectOutputStream oos = new ObjectOutputStream(fos);
-		oos.writeObject(allCars);
-		oos.close();
-		} catch (IOException e) {
-		ViewManager.getInstance().showMessage(ex.getLocalizedMessage());
-		}
-		}
-	
-	
-	
-
 }
