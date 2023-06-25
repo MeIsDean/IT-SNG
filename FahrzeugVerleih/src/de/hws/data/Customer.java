@@ -35,6 +35,10 @@ public class Customer implements Serializable {
 		return adresse;
 	}
 	
+	public void setAdresse(String adresse) {
+		this.adresse = adresse;
+	}
+	
 	public String toString() {
 		return null;
 	}

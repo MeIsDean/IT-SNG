@@ -1,16 +1,9 @@
 package de.hws.data;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-
-import view.FileOutputStream;
-import view.ViewManager;
 
 public class Motocar implements Serializable {
 	private long fzid;
@@ -24,8 +17,8 @@ public class Motocar implements Serializable {
 	
 	public Motocar(long fzId, String lic, String name, String type, int km, Timestamp nextCheck) {
 		super();
-		this.fzid = fzId;
-		this.license = license;
+		this.fzid =(long) fzId;
+		this.license = lic;
 		this.name = name;
 		this.type = type;
 		this.km = km;
@@ -69,10 +62,12 @@ public class Motocar implements Serializable {
 	}
 	
 	public Location getLastPos() {
-		if (locations != null && locations.size() >0) {
+		if(locations != null && locations.size()>0) {
+			return locations.get(locations.size()-1);
 		}
-		
+		return null;
 	}
+		
    
 	public List<Location> getLocationList(){
 		
@@ -80,7 +75,10 @@ public class Motocar implements Serializable {
 	}
 	
 	public void addLocation(Location loc) {
-		
+		if(locations == null ) {
+			locations = new ArrayList<Location>();
+		}
+		locations.add(loc);
 	}
 	
 	// public SwingWaypoint getMyPoint () {
@@ -100,6 +98,11 @@ public class Motocar implements Serializable {
 	}
 	
 	public String[] getCarColumns() {
+		return null;
+	}
+
+	public Object getMyPoint() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 	
