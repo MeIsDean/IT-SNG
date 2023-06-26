@@ -13,7 +13,7 @@ public class Motocar implements Serializable {
 	private int km;
 	private Timestamp nextCheck;
 	private List<Location> locations;
-	// private SwingWaypoint swPoint;
+	private SwingWaypoint swPoint;
 	
 	public Motocar(long fzId, String lic, String name, String type, int km, Timestamp nextCheck) {
 		super();
@@ -81,13 +81,13 @@ public class Motocar implements Serializable {
 		locations.add(loc);
 	}
 	
-	// public SwingWaypoint getMyPoint () {
-	//	return null;
-	// }
+	 public SwingWaypoint getMyPoint () {
+		return null;
+	 }
 	
-	// public void setMyPoint (SwingWaypoint Swing) {
+     public void setMyPoint (SwingWaypoint Swing) {
 		
-    //  }
+      }
 	
 	public String toString() {
 		return null;

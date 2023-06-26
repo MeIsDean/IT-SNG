@@ -69,15 +69,15 @@ public class kundenFrame extends JFrame {
 		contentPane.add(textField_2);
 		
 		JLabel lblNewLabel = new JLabel("Name");
-		lblNewLabel.setBounds(149, 27, 46, 14);
+		lblNewLabel.setBounds(163, 27, 46, 14);
 		contentPane.add(lblNewLabel);
 		
 		JLabel lblVorname = new JLabel("Vorname");
-		lblVorname.setBounds(129, 83, 66, 14);
+		lblVorname.setBounds(143, 83, 66, 14);
 		contentPane.add(lblVorname);
 		
 		JLabel lblAdresse = new JLabel("Adresse");
-		lblAdresse.setBounds(149, 137, 46, 14);
+		lblAdresse.setBounds(143, 137, 66, 14);
 		contentPane.add(lblAdresse);
 	}
 

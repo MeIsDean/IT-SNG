@@ -4,7 +4,9 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -14,6 +16,10 @@ import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import de.hws.data.Customer;
 import de.hws.data.Location;
@@ -52,30 +58,34 @@ public class AppManager implements Serializable {
 
 	}
 
-	private void writeCarsToFile(String filepath) {
+	private void writeCarsToFile(String filePath) {
 		try {
 			FileOutputStream fos = new FileOutputStream(filepath);
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
 			oos.writeObject(allCars);
 			oos.close();
-		} catch (IOException e) {
-			ViewManager.getInstance().showMessage(e.getLocalizedMessage());
+		} catch (IOException ex) {
+			ViewManager.getInstance().showMessage(ex.getLocalizedMessage());
 		}
 	}
 
-	private void readCarsFromFile(String filepath) {
+	private void readCarsFromFile(String filePath) {
 		try {
-			FileInputStream fis = new FileInputStream(filepath);
-			ObjectInputStream ois = new ObjectInputStream(fis);
-			allCars = (ArrayList<Motocar>) ois.readObject();
+		FileInputStream fis = new FileInputStream(String filePath);
+		ObjectInputStream ois = new ObjectInputStream(fis);
+		allCars = (ArrayList<Motocar>) ois.readObject();
 		} catch (IOException | ClassNotFoundException e) {
+		e.printStackTrace();
+		}
+		}
+
+	private void exportCarsToFile(String filePath) {
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		try {
+			gson.toJson(allCars, new FileWriter(filePath));
+		} catch (JsonIOException | IOException ex) {
 			e.printStackTrace();
 		}
-
-	}
-
-	private void exportCarsToFile(String filepath) {
-
 	}
 
 	private List<Motocar> importCarsFromFile(String filepath) {
@@ -109,9 +119,42 @@ public class AppManager implements Serializable {
 
 	}
 
-	private List<Customer> importCustomersFromFile(String filepath) {
-		return null;
-
+	private List<Customer> importCustomersFromFile(String filePath) {
+		allCustomers = new ArrayList<Customer>();
+		try {
+			String resJSon = "";
+			InputStreamReader reader = new InputStreamReader(new FileInputStream(filePath), "UTF-8");
+			int data = reader.read();
+			while (data != -1) {
+				resJSon += (char) data;
+				data = reader.read();
+			}
+			reader.close();
+			JsonParser parser = new JsonParser();
+			JsonElement tree = parser.parse(resJSon);
+			JsonObject dataSet = tree.getAsJsonObject();
+			JsonElement elem = dataSet.get("customers");
+			if (elem.isJsonArray()) {
+				JsonArray datArr = elem.getAsJsonArray();
+				for (int i = 0; i < datArr.size(); i++) {
+					JsonObject obj = datArr.get(i).getAsJsonObject();
+					// mit obj.get("item").toString() erhält man den Wert des Attributs als String
+					// mit Long.parseLong(String) kann kann den String in einen long-Wert umwandeln
+					// analog mit Double.parseDouble oder Integer.parseInt
+					/*
+					 * Mit SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd",
+					 * Locale.GERMAN); String checkStr = obj.get("dateItem").toString(); checkStr =
+					 * checkStr.substring(1, checkStr.length()-1); Date nextcheck =
+					 * formatter.parse(checkStr);
+					 */
+					// neues Objekt erzeugen und initialisieren, jeweils Customer bzw. Motorcar
+					allCustomers.add(temp);
+				}
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return allCustomers;
 	}
 
 	public void readData() {
@@ -127,7 +170,8 @@ public class AppManager implements Serializable {
 	}
 
 	public void exportData() {
-
+		exportCarsToFile("./CarsDump.json");
+		exportCustomersToFile("./CustomersDump.json");
 	}
 
 	public List<Motocar> getCars() {
@@ -163,35 +207,6 @@ public class AppManager implements Serializable {
 	public Customer getSpecificCustomer(long id) {
 		return null;
 
-	}
-
-	public void addBike(BikeData bike) {
-		bikeData.add(bike);
-		writeDataToFile();
-	}
-
-	public void writeDataToFile() {
-		try {
-			FileOutputStream fos = new FileOutputStream("bikedata.json");
-			DataOutputStream dos = new DataOutputStream(fos);
-			Gson gson = new GsonBuilder().setPrettyPrinting().create();
-			String json = gson.toJson(bikeData);
-			dos.writeUTF(json);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void readDataFromFile() {
-		try {
-			FileInputStream fis = new FileInputStream("bikedata.json");
-			DataInputStream dis = new DataInputStream(fis);
-			String json = dis.readUTF();
-			Gson gson = new Gson();
-			bikeData = gson.fromJson(json, ArrayList.class);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 }
